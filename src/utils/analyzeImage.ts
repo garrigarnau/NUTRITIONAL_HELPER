@@ -1,14 +1,14 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { API_KEY } from '../config';  // Import the API key from the configuration file
 
-const API_KEY = 'AIzaSyAfbXBt9TT92i6bfhYyPtEpvhzf0JqD59k';
-
-const prompt = `
-Read the nutritional label in the provided image. Keep in mind that the calories may appear as: energetic value. Extract the nutritional information not for every  100g but for unit. 
+const prompt = (weight: number) => `
+Read the nutritional label in the provided image. Keep in mind that the calories may appear as: energetic value. Extract the nutritional information not for every 100g but for unit. Keep in mind
+that you may need to make some calculations usign the shown units and the whole weight.Also give me the information to know if you are calculating by the whole product or for units. If you find the total weight of the product divide it by 100g to make the calculations by unit. Analyze the nutritional content
 and return the data in JSON format. Additionally, provide context for each value by:
 1. Comparing sugars to scoops of sugar (1 scoop = 5g).
 2. Comparing fat to tablespoons of butter (1 tablespoon = 11g).
 3. Comparing sodium to teaspoons of salt (1 teaspoon = 2,300mg).
-4. Calculating jogging time required to burn the calories (1 minute of jogging burns 10 kcal).
+4. Calculating jogging time required to burn the calories based on a weight of ${weight} kg (1 minute of jogging burns 10 kcal for an average weight).
 5. Suggest equivalent foods based on the calorie count. Use these food examples and their average calorie values:
    - Banana: 105 calories
    - Slice of pizza: 285 calories
@@ -36,7 +36,7 @@ IMPORTANT: Your response must be ONLY a valid JSON object with no additional tex
   }
 }`;
 
-export async function analyzeImage(file: File) {
+export async function analyzeImage(file: File, weight: number) {
   try {
     if (!file.type.startsWith('image/')) {
       throw new Error('Please upload a valid image file');
@@ -70,7 +70,7 @@ export async function analyzeImage(file: File) {
     };
 
     // Generate content
-    const result = await model.generateContent([prompt, imagePart]);
+    const result = await model.generateContent([prompt(weight), imagePart]);
     if (!result.response) {
       throw new Error('No response from API');
     }

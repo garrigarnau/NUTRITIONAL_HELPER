@@ -9,12 +9,18 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [weight, setWeight] = useState<number | null>(null);
 
   const handleImageSelect = async (file: File) => {
+    if (weight === null) {
+      setError('Please enter your weight.');
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
-      const analysisResult = await analyzeImage(file);
+      const analysisResult = await analyzeImage(file, weight);
       setResult(analysisResult);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to analyze the image. Please try again.';
@@ -42,6 +48,16 @@ function App() {
         </div>
 
         <div className="flex flex-col items-center space-y-8">
+          <div className="flex flex-col space-y-4">
+            <input
+              type="number"
+              placeholder="Enter your weight (kg)"
+              value={weight ?? ''}
+              onChange={(e) => setWeight(Number(e.target.value))}
+              className="p-2 border border-gray-300 rounded-lg"
+            />
+          </div>
+
           <ImageUpload onImageSelect={handleImageSelect} isLoading={isLoading} />
           
           {error && (
