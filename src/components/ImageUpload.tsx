@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Upload } from 'lucide-react';
 
 interface ImageUploadProps {
@@ -7,12 +7,15 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ onImageSelect, isLoading }: ImageUploadProps) {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
       if (file && file.type.startsWith('image/')) {
         onImageSelect(file);
+        setImageUrl(URL.createObjectURL(file));
       }
     },
     [onImageSelect]
@@ -23,6 +26,7 @@ export function ImageUpload({ onImageSelect, isLoading }: ImageUploadProps) {
       const file = e.target.files?.[0];
       if (file) {
         onImageSelect(file);
+        setImageUrl(URL.createObjectURL(file));
       }
     },
     [onImageSelect]
@@ -51,12 +55,18 @@ export function ImageUpload({ onImageSelect, isLoading }: ImageUploadProps) {
             <p className="text-gray-600">Analyzing image...</p>
           ) : (
             <>
-              <p className="text-lg font-semibold text-gray-700">
-                Drop your image here
-              </p>
-              <p className="text-sm text-gray-500">
-                or click to select a nutrition label image
-              </p>
+              {imageUrl ? (
+                <img src={imageUrl} alt="Uploaded" className="max-w-full max-h-64 object-contain" />
+              ) : (
+                <>
+                  <p className="text-lg font-semibold text-gray-700">
+                    Drop your image here
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    or click to select a nutrition label image
+                  </p>
+                </>
+              )}
             </>
           )}
         </div>
