@@ -10,6 +10,12 @@ Welcome to the Nutritional Helper project! This application allows users to uplo
 - Calculate jogging time required to burn the calories based on user weight.
 - Suggest equivalent foods based on the calorie count.
 
+## Interface
+<img width="461" alt="dashboard" src="https://github.com/user-attachments/assets/049d3ba4-4999-424b-b1d3-9e77111102e7" />
+<img width="473" alt="dashboard1" src="https://github.com/user-attachments/assets/2b9e5285-979a-4108-bf8a-32fee54bcba3" />
+<img width="454" alt="dashboard2" src="https://github.com/user-attachments/assets/ef12ca68-a653-4dd5-abed-ea0bd88ff881" />
+
+
 ## Getting Started
 
 ### Prerequisites
